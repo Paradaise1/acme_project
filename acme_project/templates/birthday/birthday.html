@@ -1,10 +1,18 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
 
 {% block content %}
-  <form>
-    {{ form.as_p }}
-    <input type="submit" value="Отправить">
-  </form>
+  <div class="card col-4">
+    <div class="card-header">
+      Калькулятор ожидания дня рождения
+    </div>
+    <div class="card-body">
+      <form>
+        {% bootstrap_form form %}
+        {% bootstrap_button button_type="submit" content="Отправить" %}
+      </form>
+    </div>
+  </div>
   {% with data=request.GET %}
     {% if form.is_valid %}
       <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
