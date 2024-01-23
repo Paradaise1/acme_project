@@ -28,8 +28,13 @@ def birthday(request, pk=None):
 
 def birthday_list(request):
     birthdays = get_list_or_404(Birthday)
-    # sorted(birthdays, key=lambda x: x.id)
-    context = {'birthdays': birthdays}
+    birthday_countdown_list = [
+        calculate_birthday_countdown(item.birthday) for item in birthdays
+    ]
+    context = {
+        'birthdays': birthdays,
+        'birthday_countdown_list': birthday_countdown_list
+    }
     return render(request, 'birthday/birthday_list.html', context)
 
 
