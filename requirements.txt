@@ -1,5 +1,9 @@
 asgiref==3.7.2
 Django==3.2.16
 django-bootstrap5==22.2
+flake8==7.0.0
+mccabe==0.7.0
+pycodestyle==2.11.1
+pyflakes==3.2.0
 pytz==2023.3.post1
 sqlparse==0.4.4

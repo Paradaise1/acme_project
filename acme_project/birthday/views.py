@@ -13,7 +13,7 @@ def birthday(request, pk=None):
     if pk is not None:
         instance = get_object_or_404(Birthday, pk=pk)
     else:
-        instance=None
+        instance = None
     form = BirthdayForm(request.POST or None, instance=instance)
     context = {'form': form}
     if form.is_valid():
@@ -22,13 +22,13 @@ def birthday(request, pk=None):
             form.cleaned_data['birthday']
         )
         context.update({'birthday_countdown': birthday_countdown})
-        
+
     return render(request, 'birthday/birthday.html', context)
 
 
 def birthday_list(request):
     birthdays = get_list_or_404(Birthday)
-    #sorted(birthdays, key=lambda x: x.id)
+    # sorted(birthdays, key=lambda x: x.id)
     context = {'birthdays': birthdays}
     return render(request, 'birthday/birthday_list.html', context)
 
