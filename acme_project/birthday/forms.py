@@ -11,7 +11,7 @@ class BirthdayForm(forms.ModelForm):
 
     class Meta:
         model = Birthday
-        fields = '__all__'
+        exclude = ('days_left_for_birthday',)
         widgets = {
             'birthday': forms.DateInput(attrs={'type': 'date'})
         }

@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'birthday.apps.BirthdayConfig',
     'pages.apps.PagesConfig',
     'django_bootstrap5',
+    'computed_property',
     'debug_toolbar',
 ]
 

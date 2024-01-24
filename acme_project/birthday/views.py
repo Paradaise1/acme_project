@@ -35,20 +35,13 @@ def birthday(request, pk=None):
 
 def birthday_list(request):
     birthdays = get_list_or_404(Birthday.objects.order_by('id'))
-    birthday_countdown_list = [
-        calculate_birthday_countdown(item.birthday) for item in birthdays
-    ]
 
     paginator = Paginator(birthdays, ITEMS_PER_PAGE)
     page_namber = request.GET.get('page')
     page_obj = paginator.get_page(page_namber)
 
-    left = (int(page_namber) - 1) * ITEMS_PER_PAGE if page_namber else 0
-    right = left + len(page_obj.object_list)
-
     context = {
         'page_obj': page_obj,
-        'birthday_countdown_list': birthday_countdown_list[left:right]
     }
     return render(request, 'birthday/birthday_list.html', context)
 
