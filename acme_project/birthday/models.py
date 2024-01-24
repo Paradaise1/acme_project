@@ -15,6 +15,11 @@ class Birthday(models.Model):
         verbose_name='Дата рождения',
         validators=(real_age,)
     )
+    image = models.ImageField(
+        blank=True,
+        upload_to='birthdays_images',
+        verbose_name='Фото'
+    )
 
     class Meta:
         constraints = (
