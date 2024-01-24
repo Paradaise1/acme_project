@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+  <h1>Удалить запись {{ object.pk }}</h1>
+  <div class="ccard col-4 m-3">
+    <div class="card-header">
+      {{ birthday.first_name }} {{ birthday.last_name }} - {{ birthday.birthday }}
+      <br>До дня рождения осталось {{ birthday.days_left_for_birthday }} дней!
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {% bootstrap_button button_type="submit" content="Удалить" %}
+      </form>
+    </div>
+  </div>
+{% endblock content %}

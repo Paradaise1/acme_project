@@ -5,8 +5,6 @@
   {% with data=form.instance %}
     {% if '/edit/' in request.path %}
       <h1>Редактировать запись {{ data.pk }}</h1>
-    {% elif '/delete/' in request.path %}
-      <h1>Удалить запись {{ data.pk }}</h1>
     {% else %}
       <h1>Создать запись</h1>
     {% endif %}
@@ -17,17 +15,11 @@
       <div class="card-body">
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {% if '/delete/' not in request.path %}
-              {% bootstrap_form form %}
-              {% if '/edit/' in request.path %}
-                {% bootstrap_button button_type="submit" content="Сохранить" %}
-              {% else %}
-                {% bootstrap_button button_type="submit" content="Отправить" %}
-              {% endif %}
+            {% bootstrap_form form %}
+            {% if '/edit/' in request.path %}
+              {% bootstrap_button button_type="submit" content="Сохранить" %}
             {% else %}
-              <p>{{ data.first_name }} {{ data.last_name }}</p>
-              <p>{{ data.birthday }}</p>
-              {% bootstrap_button button_type="submit" content="Удалить" %}
+              {% bootstrap_button button_type="submit" content="Отправить" %}
             {% endif %}
         </form>
       </div>
