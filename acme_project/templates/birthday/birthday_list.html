@@ -2,7 +2,7 @@
 {% load custom_filters %}
 
 {% block content %}
-  {% for birthday in birthdays %}
+  {% for birthday in page_obj %}
     <div class="row">
       <div class="col-2">
         {% if birthday.image %}
@@ -24,4 +24,5 @@
       {% endif %}
     </div>
   {% endfor %}
+  {% include "includes/paginator.html" %}
 {% endblock %}
