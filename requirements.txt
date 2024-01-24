@@ -1,6 +1,7 @@
 asgiref==3.7.2
 Django==3.2.16
 django-bootstrap5==22.2
+django_debug_toolbar==3.8.1
 flake8==7.0.0
 mccabe==0.7.0
 Pillow==9.3.0
