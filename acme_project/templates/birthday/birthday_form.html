@@ -2,9 +2,8 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-  {% with data=form.instance %}
     {% if '/edit/' in request.path %}
-      <h1>Редактировать запись {{ data.pk }}</h1>
+      <h1>Редактировать запись {{ form.instance.pk }}</h1>
     {% else %}
       <h1>Создать запись</h1>
     {% endif %}
@@ -24,15 +23,4 @@
         </form>
       </div>
     </div>
-    {% if form.is_valid %}
-      ID новой записи в БД: {{ data.id }}
-      <hr>
-      <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
-      {% if birthday_countdown == 0 %}
-        С днём рождения!
-      {% else %}
-        Осталось дней до дня рождения: {{ birthday_countdown }}!
-      {% endif %}
-    {% endif %}
-  {% endwith %}
 {% endblock %}

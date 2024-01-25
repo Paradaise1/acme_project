@@ -11,8 +11,9 @@
       </div>
       <div class="col-10">
         <div>
-          {{ birthday.first_name }} {{ birthday.last_name }} - {{ birthday.birthday }}
-          <br>До дня рождения осталось {{ birthday.days_left_for_birthday }} дней!
+          {{ birthday.first_name }} {{ birthday.last_name }} - {{ birthday.birthday }}<br>
+          До дня рождения осталось {{ birthday.days_left_for_birthday }} дней!<br>
+          <a href="{% url 'birthday:detail' birthday.id %}">Сколько до дня рождения?</a>
         </div>
         <div>
           <a href="{% url 'birthday:edit' birthday.id %}">Изменить запись</a> |

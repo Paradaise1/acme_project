@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from computed_property import ComputedTextField
 
@@ -25,10 +26,6 @@ class Birthday(models.Model):
         verbose_name='Фото'
     )
 
-    @property
-    def calculate(self):
-        return str(calculate_birthday_countdown(self.birthday))
-
     class Meta:
         constraints = (
             models.UniqueConstraint(
@@ -36,3 +33,11 @@ class Birthday(models.Model):
                 name='Unique person constraint'
             ),
         )
+
+    @property
+    def calculate(self):
+        return str(calculate_birthday_countdown(self.birthday))
+
+    def get_absolute_url(self):
+        return reverse('birthday:detail', kwargs={'pk': self.pk})
+    
