@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -42,14 +41,15 @@ class BirthdayDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["birthday_countdown"] = calculate_birthday_countdown(
+        context['birthday_countdown'] = calculate_birthday_countdown(
             self.object.birthday
         )
         return context
 
 
 # -------- Не используя CBV ------------
-    
+
+# from django.core.paginator import Paginator
 # from django.shortcuts import (
 #     get_list_or_404,
 #     get_object_or_404,
