@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -7,10 +8,10 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 
-from .forms import BirthdayForm
-from .models import Birthday
+from .forms import BirthdayForm, CongratulationForm
+from .models import Birthday, Congratulation
 from .utils import calculate_birthday_countdown
 
 
@@ -58,7 +59,29 @@ class BirthdayDetailView(DetailView):
         context['birthday_countdown'] = calculate_birthday_countdown(
             self.object.birthday
         )
+        context['form'] = CongratulationForm()
+        context['congratulations'] = (
+            self.object.congratulations.select_related('author')
+        )
         return context
+    
+
+class CongratulationCreateView(LoginRequiredMixin ,CreateView):
+    birthday = None
+    model = Congratulation
+    form_class = CongratulationForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.birthday = get_object_or_404(Birthday, pk=kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.birthday = self.birthday
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('birthday:detail', kwargs={'pk': self.birthday.pk})
 
 
 # -------- Не используя CBV ------------
@@ -71,6 +94,7 @@ class BirthdayDetailView(DetailView):
 #     render)
 
 
+# @login_required
 # def birthday(request, pk=None):
 #     if pk is not None:
 #         instance = get_object_or_404(Birthday, pk=pk, author=request.user)
@@ -89,11 +113,18 @@ class BirthdayDetailView(DetailView):
 #         birthday_countdown = calculate_birthday_countdown(
 #             form.cleaned_data['birthday']
 #         )
-#         context.update({'birthday_countdown': birthday_countdown})
+#         context.update({
+#             'birthday_countdown': birthday_countdown,
+#             'form': CongratulationForm(),
+#             'congratulations': (
+#                 self.object.congratulations.select_related('author')
+#             )
+#         })
 
 #     return render(request, 'birthday/birthday.html', context)
 
 
+# @login_required
 # def birthday_list(request):
 #     birthdays = get_list_or_404(Birthday.objects.order_by('id'))
 
@@ -107,6 +138,7 @@ class BirthdayDetailView(DetailView):
 #     return render(request, 'birthday/birthday_list.html', context)
     
 
+# @login_required
 # def delete_birthday(request, pk):
 #     instance = get_object_or_404(Birthday, pk=pk)
 #     form = BirthdayForm(instance=instance)
@@ -115,3 +147,15 @@ class BirthdayDetailView(DetailView):
 #         instance.delete()
 #         return redirect('birthday:list')
 #     return render(request, 'birthday/birthday.html', context)
+    
+
+# @login_required
+# def add_comment(request, pk):
+#     birthday = get_object_or_404(Birthday, pk=pk)
+#     form = CongratulationForm(request.POST)
+#     if form.is_valid():
+#         congratulation = form.save(commit=False)
+#         congratulation.author = request.user
+#         congratulation.birthday = birthday
+#         congratulation.save()
+#     return redirect('birthday:detail', pk=pk)

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
 
 {% block content %}
   ID записи: {{ object.id }}
@@ -14,4 +15,21 @@
   {% else %}
     <p>Осталось дней до дня рождения: {{ birthday_countdown }}!</p>
   {% endif %}
+  <div>
+    <h3>Поздравления:</h3>
+    {% if user.is_authenticated %}
+      <form action="{% url 'birthday:add_comment' object.pk %}" method="post" class="col-3">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% bootstrap_button button_type="submit" content="Отправить поздравление" %}
+      </form>
+    {% endif %}
+    {% for congratulation in congratulations %}
+      <hr>
+      <p>
+        {{ congratulation.author.username }} поздравил {{ congratulation.created_at|date:"d M Y H:i" }}
+      </p>
+      <p><b>{{ congratulation.text }}</b></p>
+    {% endfor %}
+  </div>
 {% endblock content %}

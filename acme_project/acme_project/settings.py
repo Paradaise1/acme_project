@@ -7,7 +7,12 @@ SECRET_KEY = 'django-insecure-m&$lzdzkutvrbr5vt=jpm)7#g7cken_tk%($ty+w902n7wb#=e
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
+
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'birthday.apps.BirthdayConfig',
     'pages.apps.PagesConfig',
+    'core.apps.CoreConfig',
     'django_bootstrap5',
     'computed_property',
     'debug_toolbar',
