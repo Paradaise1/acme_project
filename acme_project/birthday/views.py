@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -21,19 +23,31 @@ class BirthdayListView(ListView):
     paginate_by = ITEMS_PER_PAGE
 
 
-class BirthdayCreateView(CreateView):
+class BirthdayCreateView(LoginRequiredMixin, CreateView):
     model = Birthday
     form_class = BirthdayForm
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-class BirthdayUpdateView(UpdateView):
+
+class BirthdayUpdateView(LoginRequiredMixin, UpdateView):
     model = Birthday
     form_class = BirthdayForm
 
+    def dispatch(self, request, *args, **kwargs):
+        get_object_or_404(Birthday, pk=kwargs['pk'], author=request.user)
+        return super().dispatch(request, *args, **kwargs)
 
-class BirthdayDeleteView(DeleteView):
+
+class BirthdayDeleteView(LoginRequiredMixin, DeleteView):
     model = Birthday
     success_url = reverse_lazy('birthday:list')
+
+    def dispatch(self, request, *args, **kwargs):
+        get_object_or_404(Birthday, pk=kwargs['pk'], author=request.user)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class BirthdayDetailView(DetailView):
@@ -59,7 +73,7 @@ class BirthdayDetailView(DetailView):
 
 # def birthday(request, pk=None):
 #     if pk is not None:
-#         instance = get_object_or_404(Birthday, pk=pk)
+#         instance = get_object_or_404(Birthday, pk=pk, author=request.user)
 #     else:
 #         instance = None
 #     form = BirthdayForm(
@@ -69,7 +83,9 @@ class BirthdayDetailView(DetailView):
 #     )
 #     context = {'form': form}
 #     if form.is_valid():
-#         form.save()
+#         instance = form.save(commit=False)
+#         instance.author = request.user
+#         instance.save()
 #         birthday_countdown = calculate_birthday_countdown(
 #             form.cleaned_data['birthday']
 #         )

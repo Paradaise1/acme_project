@@ -12,7 +12,7 @@ class BirthdayForm(forms.ModelForm):
 
     class Meta:
         model = Birthday
-        exclude = ('days_left_for_birthday',)
+        exclude = ('days_left_for_birthday', 'author')
         widgets = {
             'birthday': forms.DateInput(attrs={'type': 'date'})
         }
