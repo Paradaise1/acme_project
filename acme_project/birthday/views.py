@@ -20,6 +20,9 @@ ITEMS_PER_PAGE = 3 # Поменять на 10 когда БД будет бол�
 
 class BirthdayListView(ListView):
     model = Birthday
+    queryset = Birthday.objects.prefetch_related(
+        'tags'
+    ).select_related('author')
     ordering = 'id'
     paginate_by = ITEMS_PER_PAGE
 

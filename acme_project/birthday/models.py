@@ -11,6 +11,17 @@ from .validators import real_age
 User = get_user_model()
 
 
+class Tag(models.Model):
+    tag = models.CharField(max_length=20, verbose_name='Тег')
+
+    class Meta:
+        verbose_name = 'тег'
+        verbose_name_plural = 'Теги'
+
+    def __str__(self):
+        return self.tag
+
+
 class Birthday(models.Model):
     first_name = models.CharField(max_length=20, verbose_name='Имя')
     last_name = models.CharField(
@@ -35,6 +46,12 @@ class Birthday(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+    tags = models.ManyToManyField(
+        Tag,
+        verbose_name='Тэги',
+        blank=True,
+        help_text='Удерживайте Ctrl для выбора нескольких вариантов',
+    )
 
     class Meta:
         constraints = (
@@ -44,12 +61,18 @@ class Birthday(models.Model):
             ),
         )
 
+        verbose_name = 'день рождения'
+        verbose_name_plural = 'Дни рождения'
+
     @property
     def calculate(self):
         return str(calculate_birthday_countdown(self.birthday))
 
     def get_absolute_url(self):
         return reverse('birthday:detail', kwargs={'pk': self.pk})
+    
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
     
 
 class Congratulation(models.Model):
